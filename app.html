@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -94,7 +93,6 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
 
     .field-group { display:flex; flex-direction:column; gap:8px; }
     .field-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; }
-    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
     input[type="text"],input[type="email"],input[type="number"],select,textarea {
       width:100%; background:var(--surface2); border:1px solid rgba(255,255,255,0.07); border-radius:8px;
@@ -122,16 +120,7 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
     /* pH scale bar */
     .ph-scale {
       height:8px; border-radius:4px; margin-bottom:6px;
-      background:linear-gradient(to right,
-        #ff4444 0%,       /* 4.5 산성 */
-        #ff8800 15%,
-        #ffcc00 30%,
-        #aaff00 45%,
-        #00ff94 55%,      /* 7.35–7.45 정상 */
-        #00ccff 70%,
-        #6655ff 85%,
-        #aa00ff 100%      /* 9.0 알칼리성 */
-      );
+      background:linear-gradient(to right,#ff4444 0%,#ff8800 15%,#ffcc00 30%,#aaff00 45%,#00ff94 55%,#00ccff 70%,#6655ff 85%,#aa00ff 100%);
       position:relative;
     }
     .ph-thumb-line {
@@ -156,18 +145,14 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
 
     /* pH meter visual */
     .ph-meter-body { padding:28px 24px; }
-    .ph-big {
-      font-family:'Bebas Neue',sans-serif; font-size:88px; line-height:1;
-      letter-spacing:2px; text-align:center; transition:color 0.5s;
-      margin-bottom:4px;
-    }
+    .ph-big { font-family:'Bebas Neue',sans-serif; font-size:88px; line-height:1; letter-spacing:2px; text-align:center; transition:color 0.5s; margin-bottom:4px; }
     .ph-category { font-family:'DM Mono',monospace; font-size:12px; letter-spacing:3px; text-align:center; text-transform:uppercase; transition:color 0.5s; margin-bottom:24px; }
 
     /* arc gauge */
     .gauge-wrap { display:flex; justify-content:center; margin-bottom:20px; }
     .gauge-svg { width:200px; height:110px; overflow:visible; }
 
-    /* biomarker rows inside panel */
+    /* biomarker rows */
     .bio-rows { padding:4px 0; }
     .bio-row { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid rgba(0,229,255,0.05); transition:background 0.3s; }
     .bio-row:last-child { border-bottom:none; }
@@ -184,7 +169,7 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
     /* condition comment */
     .comment-body { padding:20px 24px; display:flex; flex-direction:column; gap:12px; }
     .comment-condition {
-      display:flex; align-items:center; gap:10px;
+      display:flex; align-items:flex-start; gap:10px;
       background:var(--surface2); border:1px solid var(--border);
       border-radius:10px; padding:14px 16px;
       cursor:none; transition:border-color 0.2s;
@@ -196,19 +181,41 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
     .cond-msg { font-size:12px; color:var(--muted); line-height:1.5; }
     .no-condition { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:1px; text-align:center; padding:12px 0; }
 
+    /* ── DIAGNOSIS CARD (new) ── */
+    .diag-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:20px; overflow:hidden;
+      display:none; transition:border-color 0.3s;
+    }
+    .diag-card.visible { display:block; }
+    .diag-header {
+      padding:18px 24px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .diag-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; }
+    .diag-subtitle { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; margin-top:2px; }
+    .urgent-pill {
+      font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px;
+      padding:4px 10px; border-radius:20px; white-space:nowrap; flex-shrink:0;
+      background:rgba(239,68,68,0.12); color:#ef4444; border:1px solid rgba(239,68,68,0.3);
+    }
+    .diag-body { padding:20px 24px; display:flex; flex-direction:column; gap:14px; }
+    .diag-section { display:flex; flex-direction:column; gap:6px; }
+    .diag-section-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+    .diag-section-text { font-size:13px; color:#a8bcd4; line-height:1.7; }
+    .diag-divider { height:1px; background:rgba(0,229,255,0.07); }
+    .advice-list { display:flex; flex-direction:column; gap:8px; }
+    .advice-row { display:flex; gap:10px; align-items:flex-start; }
+    .advice-num { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); min-width:16px; margin-top:2px; flex-shrink:0; }
+    .advice-text { font-size:13px; color:#a8bcd4; line-height:1.6; }
+    .diag-note { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.5px; line-height:1.65; padding:10px 12px; background:rgba(255,255,255,0.02); border-radius:8px; border:1px solid rgba(255,255,255,0.05); }
+
     /* ref ranges */
     .ref-row { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid rgba(0,229,255,0.05); font-size:12px; }
     .ref-row:last-child { border-bottom:none; }
     .ref-key { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
 
-    /* success overlay */
-    .success-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(4,6,13,0.95); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-    .success-overlay.show { display:flex; animation:fadeUp 0.5s ease both; }
-    .success-ring { width:120px; height:120px; border:2px solid var(--accent3); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:48px; margin-bottom:32px; box-shadow:0 0 60px rgba(0,255,148,0.2); animation:spinOnce 0.8s ease; }
-    @keyframes spinOnce { from{transform:scale(0) rotate(-90deg)} to{transform:scale(1) rotate(0)} }
-    .success-title { font-family:'Bebas Neue',sans-serif; font-size:64px; letter-spacing:2px; color:var(--accent3); margin-bottom:16px; line-height:1; }
-    .success-sub { font-size:16px; color:var(--muted); line-height:1.7; max-width:420px; margin-bottom:40px; }
-    .success-detail { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:1px; line-height:1.8; }
+    /* overall */
+    .overall-body { padding:20px 24px; }
 
     /* reveal */
     .reveal { opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease; }
@@ -235,18 +242,6 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- SUCCESS -->
-  <div class="success-overlay" id="successOverlay">
-    <div class="success-ring">✓</div>
-    <div class="success-title">신청 완료!</div>
-    <p class="success-sub">ICAN'TDIE 패치 체험 신청이 접수되었습니다.<br>입력하신 이메일로 발송 안내를 드릴게요.</p>
-    <div class="success-detail" id="successSummary"></div>
-    <br><br>
-    <a href="index.html" style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--muted);text-decoration:none;text-transform:uppercase;border:1px solid var(--border);padding:14px 28px;border-radius:4px;cursor:none;transition:color 0.3s,border-color 0.3s"
-      onmouseenter="this.style.color='var(--accent)';this.style.borderColor='rgba(0,229,255,0.4)'"
-      onmouseleave="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">← 메인으로</a>
-  </div>
-
   <nav>
     <a href="index.html" class="logo">ICAN'T<span>DIE</span></a>
     <a href="index.html" class="back-btn"><span class="back-arrow">←</span> 메인으로</a>
@@ -271,77 +266,67 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
       <!-- 01 체내 수치 입력 -->
       <div class="form-block reveal">
         <div class="form-block-header">
-          <span class="form-block-num">02</span>
+          <span class="form-block-num">01</span>
           <span class="form-block-title">체내 수치 입력</span>
         </div>
         <div class="form-block-body">
 
-          <!-- pH -->
           <div class="field-group">
             <label class="field-label">혈액 pH</label>
             <div class="range-val" id="ph-val-label">7.40</div>
             <div class="ph-scale" id="ph-scale-bar">
               <div class="ph-thumb-line" id="ph-thumb"></div>
             </div>
-            <input type="range" id="f-ph" min="4.5" max="9.0" step="0.05" value="7.40"
-              oninput="onSlider()">
+            <input type="range" id="f-ph" min="4.5" max="9.0" step="0.05" value="7.40" oninput="onSlider()">
             <div class="range-labels">
-              <span>4.5 산성</span>
-              <span>7.0 중성</span>
-              <span>9.0 알칼리</span>
+              <span>4.5 산성</span><span>7.0 중성</span><span>9.0 알칼리</span>
             </div>
           </div>
 
-          <!-- 혈당 -->
           <div class="field-group">
             <label class="field-label">혈당 (mg/dL)</label>
             <div class="range-val" id="glucose-val-label">85 mg/dL</div>
-            <input type="range" id="f-glucose" min="50" max="160" step="1" value="85"
-              oninput="onSlider()">
+            <input type="range" id="f-glucose" min="50" max="160" step="1" value="85" oninput="onSlider()">
             <div class="range-labels"><span>50</span><span>정상 70–100</span><span>160</span></div>
           </div>
 
-          <!-- 젖산 -->
           <div class="field-group">
             <label class="field-label">젖산 (mmol/L)</label>
             <div class="range-val" id="lactate-val-label">1.2 mmol/L</div>
-            <input type="range" id="f-lactate" min="0.3" max="5.5" step="0.1" value="1.2"
-              oninput="onSlider()">
+            <input type="range" id="f-lactate" min="0.3" max="5.5" step="0.1" value="1.2" oninput="onSlider()">
             <div class="range-labels"><span>0.3</span><span>정상 0.5–2.0</span><span>5.5</span></div>
           </div>
 
-          <!-- 나트륨 -->
           <div class="field-group">
             <label class="field-label">나트륨 Na⁺ (mEq/L)</label>
             <div class="range-val" id="sodium-val-label">138 mEq/L</div>
-            <input type="range" id="f-sodium" min="120" max="160" step="1" value="138"
-              oninput="onSlider()">
+            <input type="range" id="f-sodium" min="120" max="160" step="1" value="138" oninput="onSlider()">
             <div class="range-labels"><span>120</span><span>정상 136–145</span><span>160</span></div>
           </div>
-
         </div>
       </div>
 
-      <!-- 03 기저질환 -->
+      <!-- 02 기저질환 -->
       <div class="form-block reveal">
         <div class="form-block-header">
-          <span class="form-block-num">03</span>
+          <span class="form-block-num">02</span>
           <span class="form-block-title">기저질환 (복수 선택)</span>
         </div>
         <div class="form-block-body">
           <div class="chip-group" id="condition-chips">
-            <div class="chip" data-val="none">없음</div>
+            <div class="chip active" data-val="none">없음</div>
             <div class="chip" data-val="diabetes">당뇨</div>
             <div class="chip" data-val="hyperlipidemia">고지혈증</div>
-            <div class="chip" data-val="anemia">빈혈</div>
+            <div class="chip" data-val="migraine">편두통</div>
           </div>
+          <p style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;line-height:1.6;">기저질환을 선택하면 오른쪽 패널에 맞춤형 진단 결과가 즉시 업데이트됩니다.</p>
         </div>
       </div>
 
-      <!-- 04 라이프스타일 -->
+      <!-- 03 라이프스타일 -->
       <div class="form-block reveal">
         <div class="form-block-header">
-          <span class="form-block-num">04</span>
+          <span class="form-block-num">03</span>
           <span class="form-block-title">라이프스타일</span>
         </div>
         <div class="form-block-body">
@@ -384,7 +369,6 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
           <span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;">실시간</span>
         </div>
         <div class="ph-meter-body">
-          <!-- arc gauge -->
           <div class="gauge-wrap">
             <svg class="gauge-svg" viewBox="0 0 200 110" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -397,17 +381,13 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
                 </linearGradient>
                 <filter id="needleGlow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
               </defs>
-              <!-- track -->
               <path d="M 10,100 A 90,90 0 0,1 190,100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="14" stroke-linecap="round"/>
-              <!-- colored arc -->
               <path d="M 10,100 A 90,90 0 0,1 190,100" fill="none" stroke="url(#gaugeGrad)" stroke-width="14" stroke-linecap="round" opacity="0.9"/>
-              <!-- needle -->
               <line id="gauge-needle" x1="100" y1="100" x2="100" y2="18"
                 stroke="white" stroke-width="2.5" stroke-linecap="round" filter="url(#needleGlow)"
                 transform="rotate(0 100 100)"/>
               <circle cx="100" cy="100" r="6" fill="white"/>
               <circle cx="100" cy="100" r="3" fill="var(--bg)"/>
-              <!-- zone labels -->
               <text x="14" y="118" font-family="'DM Mono',monospace" font-size="9" fill="#ff4444" opacity="0.8">산성</text>
               <text x="82" y="10" font-family="'DM Mono',monospace" font-size="9" fill="var(--accent3)" opacity="0.8" text-anchor="middle">정상</text>
               <text x="175" y="118" font-family="'DM Mono',monospace" font-size="9" fill="#7b5cff" opacity="0.8" text-anchor="end">알칼리</text>
@@ -460,20 +440,10 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
         </div>
       </div>
 
-      <!-- 기저질환 코멘트 -->
-      <div class="panel-card reveal" style="transition-delay:0.16s">
-        <div class="panel-header">
-          <span class="panel-title">기저질환 분석</span>
-        </div>
-        <div class="comment-body" id="condition-comments">
-          <div class="no-condition">기저질환을 선택하면<br>맞춤 코멘트가 표시됩니다</div>
-        </div>
-      </div>
-
       <!-- 종합 상태 -->
-      <div class="panel-card reveal" style="transition-delay:0.24s">
+      <div class="panel-card reveal" style="transition-delay:0.12s">
         <div class="panel-header"><span class="panel-title">종합 건강 상태</span></div>
-        <div style="padding:20px 24px">
+        <div class="overall-body">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
             <div>
               <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:6px">현재 상태</div>
@@ -481,14 +451,38 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
             </div>
             <div id="overall-icon" style="font-size:38px;transition:opacity 0.4s">✅</div>
           </div>
-          <div id="overall-detail" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.65;transition:opacity 0.4s">
+          <div id="overall-detail" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.65;">
             모든 수치가 정상 범위 내에 있습니다.
           </div>
         </div>
       </div>
 
+      <!-- ── 맞춤형 진단 (기저질환 선택 시 표시) ── -->
+      <div class="diag-card reveal" id="diag-card" style="transition-delay:0.16s">
+        <div class="diag-header">
+          <div>
+            <div class="diag-title" id="diag-title">맞춤형 진단</div>
+            <div class="diag-subtitle" id="diag-subtitle"></div>
+          </div>
+          <span class="urgent-pill" id="diag-urgent" style="display:none">즉각 조치 필요</span>
+        </div>
+        <div class="diag-body" id="diag-body">
+          <!-- 동적으로 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 기저질환 코멘트 -->
+      <div class="panel-card reveal" style="transition-delay:0.20s">
+        <div class="panel-header">
+          <span class="panel-title">기저질환 × 수치 상관</span>
+        </div>
+        <div class="comment-body" id="condition-comments">
+          <div class="no-condition">기저질환을 선택하면<br>맞춤 코멘트가 표시됩니다</div>
+        </div>
+      </div>
+
       <!-- 참고 범위 -->
-      <div class="panel-card reveal" style="transition-delay:0.32s">
+      <div class="panel-card reveal" style="transition-delay:0.24s">
         <div class="panel-header"><span class="panel-title">정상 참고 범위</span></div>
         <div style="padding:12px 24px">
           <div class="ref-row"><span class="ref-key">혈액 pH</span><span style="color:var(--accent3)">7.35 – 7.45</span></div>
@@ -524,20 +518,16 @@ document.querySelectorAll('button,a,.chip,.bio-row,.comment-condition').forEach(
 });
 
 /* ── SCROLL REVEAL ── */
-const obs = new IntersectionObserver(en=>en.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }),{threshold:0.1});
+const obs = new IntersectionObserver(en=>en.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }),{threshold:0.08});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* ── CHIPS: single-select groups ── */
-['gender-chips','diet-chips'].forEach(id=>{
-  const g = document.getElementById(id);
-  if(!g) return;
-  g.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
-    g.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
-    c.classList.toggle('active');
-  }));
-});
+/* ── CHIP GROUPS ── */
+document.getElementById('diet-chips').querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+  document.getElementById('diet-chips').querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+  c.classList.toggle('active');
+}));
 
-/* ── CHIPS: multi-select — condition ── */
+/* condition chips — multi (except none) */
 const condGroup = document.getElementById('condition-chips');
 condGroup.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
   if(c.dataset.val==='none'){
@@ -548,21 +538,23 @@ condGroup.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
     c.classList.toggle('active');
   }
   renderConditionComments();
+  renderDiagnosis();
 }));
 
-/* ── SIMPLE RANGE (exercise, sleep) ── */
-function updateSimple(el, labelId, fmt){
-  document.getElementById(labelId).textContent = fmt(parseInt(el.value));
-  const pct = ((el.value-el.min)/(el.max-el.min)*100).toFixed(1);
-  el.style.setProperty('--pct', pct+'%');
+/* ── SIMPLE RANGE ── */
+function updateSimple(el,labelId,fmt){
+  document.getElementById(labelId).textContent=fmt(parseInt(el.value));
+  const pct=((el.value-el.min)/(el.max-el.min)*100).toFixed(1);
+  el.style.setProperty('--pct',pct+'%');
 }
-['f-exercise','f-sleep'].forEach(id=>{ const el=document.getElementById(id); if(el) el.dispatchEvent(new Event('input')); });
+document.getElementById('f-exercise').dispatchEvent(new Event('input'));
+document.getElementById('f-sleep').dispatchEvent(new Event('input'));
 
-/* ── BIOMARKER HELPERS ── */
-const BIO = {
-  glucose: { normal:[70,100], warn:[101,125], min:50,  max:160, dec:0 },
-  lactate: { normal:[0.5,2.0],warn:[2.1,4.0], min:0.3, max:5.5, dec:1 },
-  sodium:  { normal:[136,145],warn:[146,150], min:120, max:160, dec:0 }
+/* ── BIO HELPERS ── */
+const BIO={
+  glucose:{normal:[70,100],warn:[101,125],min:50,max:160},
+  lactate:{normal:[0.5,2.0],warn:[2.1,4.0],min:0.3,max:5.5},
+  sodium: {normal:[136,145],warn:[146,150],min:120,max:160}
 };
 function bioColor(key,val){
   const b=BIO[key];
@@ -570,9 +562,7 @@ function bioColor(key,val){
   if(val>=b.warn[0]  &&val<=b.warn[1])   return 'var(--warn)';
   return 'var(--danger)';
 }
-function bioBarPct(key,val){
-  const b=BIO[key]; return Math.max(4,Math.min(96,((val-b.min)/(b.max-b.min)*100)));
-}
+function bioBarPct(key,val){ const b=BIO[key]; return Math.max(4,Math.min(96,((val-b.min)/(b.max-b.min)*100))); }
 
 /* ── pH HELPERS ── */
 function phColor(ph){
@@ -581,114 +571,214 @@ function phColor(ph){
   return 'var(--danger)';
 }
 function phLabel(ph){
-  if(ph<6.5)  return '강산성';
-  if(ph<7.0)  return '약산성';
-  if(ph<7.35) return '산성 (경계)';
+  if(ph<6.5)   return '강산성';
+  if(ph<7.0)   return '약산성';
+  if(ph<7.35)  return '산성 (경계)';
   if(ph<=7.45) return '정상 범위';
   if(ph<=7.55) return '알칼리성 (경계)';
   if(ph<=8.0)  return '약알칼리성';
   return '강알칼리성';
 }
-/* needle: pH 4.5 → -90deg, pH 9.0 → +90deg */
-function phToDeg(ph){ return ((ph-4.5)/(9.0-4.5))*180 - 90; }
+function phToDeg(ph){ return ((ph-4.5)/(9.0-4.5))*180-90; }
 
-/* ── MAIN UPDATE FUNCTION ── */
-function onSlider(){
-  const ph  = parseFloat(document.getElementById('f-ph').value);
-  const glu = parseFloat(document.getElementById('f-glucose').value);
-  const lac = parseFloat(document.getElementById('f-lactate').value);
-  const sod = parseFloat(document.getElementById('f-sodium').value);
-
-  /* ph label */
-  document.getElementById('ph-val-label').textContent = ph.toFixed(2);
-  /* ph scale thumb */
-  const pct = ((ph-4.5)/(9.0-4.5)*100);
-  document.getElementById('ph-thumb').style.left = pct+'%';
-  /* ph slider track */
-  const phEl = document.getElementById('f-ph');
-  phEl.style.setProperty('--pct', pct.toFixed(1)+'%');
-
-  /* glucose label + slider */
-  document.getElementById('glucose-val-label').textContent = glu+' mg/dL';
-  const gEl=document.getElementById('f-glucose');
-  gEl.style.setProperty('--pct',((glu-50)/110*100).toFixed(1)+'%');
-  /* lactate */
-  document.getElementById('lactate-val-label').textContent = lac.toFixed(1)+' mmol/L';
-  const lEl=document.getElementById('f-lactate');
-  lEl.style.setProperty('--pct',((lac-0.3)/5.2*100).toFixed(1)+'%');
-  /* sodium */
-  document.getElementById('sodium-val-label').textContent = sod+' mEq/L';
-  const sEl=document.getElementById('f-sodium');
-  sEl.style.setProperty('--pct',((sod-120)/40*100).toFixed(1)+'%');
-
-  /* gauge needle */
-  const deg = phToDeg(ph);
-  document.getElementById('gauge-needle').setAttribute('transform','rotate('+deg+' 100 100)');
-
-  /* ph display */
-  const pc = phColor(ph);
-  const phDisp = document.getElementById('ph-display');
-  phDisp.textContent = ph.toFixed(2);
-  phDisp.style.color = pc;
-  const phCat = document.getElementById('ph-category');
-  phCat.textContent = phLabel(ph);
-  phCat.style.color  = pc;
-
-  /* biomarker panel */
-  const gc=bioColor('glucose',glu), lc=bioColor('lactate',lac), sc=bioColor('sodium',sod);
-  const pG=document.getElementById('panel-glucose'), pL=document.getElementById('panel-lactate'), pS=document.getElementById('panel-sodium');
-  pG.textContent=glu; pG.style.color=gc;
-  pL.textContent=lac.toFixed(1); pL.style.color=lc;
-  pS.textContent=sod; pS.style.color=sc;
-  document.getElementById('bar-glucose').style.cssText=`width:${bioBarPct('glucose',glu)}%;background:${gc}`;
-  document.getElementById('bar-lactate').style.cssText=`width:${bioBarPct('lactate',lac)}%;background:${lc}`;
-  document.getElementById('bar-sodium').style.cssText =`width:${bioBarPct('sodium',sod)}%;background:${sc}`;
-
-  /* overall */
-  const cols=[pc,gc,lc,sc];
-  const allOk = cols.every(c=>c==='var(--accent3)');
-  const anyBad= cols.some(c=>c==='var(--danger)');
-  const ov = allOk?'normal':anyBad?'danger':'warn';
-  const ovColors={normal:'var(--accent3)',warn:'var(--warn)',danger:'var(--danger)'};
-  const ovLabels={normal:'정상',warn:'경계',danger:'주의 필요'};
-  const ovIcons ={normal:'✅',warn:'⚠️',danger:'🚨'};
-  const ovMessages={
-    normal:'모든 수치가 정상 범위 내에 있습니다. 현재 신체 상태는 양호합니다.',
-    warn:'일부 수치가 경계 범위에 진입했습니다. 수분 섭취와 충분한 휴식을 권장합니다.',
-    danger:'비정상 수치가 감지되었습니다. 의료 전문가 상담을 권장합니다.'
-  };
-  document.getElementById('overall-val').textContent=ovLabels[ov];
-  document.getElementById('overall-val').style.color=ovColors[ov];
-  document.getElementById('overall-icon').textContent=ovIcons[ov];
-  document.getElementById('overall-detail').textContent=ovMessages[ov];
+/* ── pH → simplified level for disease guide ── */
+function phLevel(ph){
+  if(ph<6.5)   return 'acidic';   /* 산성 */
+  if(ph<=7.55) return 'neutral';  /* 정상/중성 포함 */
+  return 'alkaline';               /* 알칼리성 */
 }
 
-/* ── CONDITION COMMENTS ── */
-const CONDITION_DATA = {
-  diabetes: {
-    icon:'💉',
-    name:'당뇨',
-    comment(glu,ph,lac){
+/* ── DISEASE GUIDE DATA ── */
+const DG={
+  '없음':{
+    acidic:{urgent:false,
+      status:'산화 스트레스 높음',
+      statusKey:'warn',
+      diagnosis:'신체 내부의 산성도가 높아져 급격한 피로와 급성 스트레스 반응이 감지되었습니다. 과도한 업무·수면 부족이 지속되면 체내 대사 부산물이 축적되어 세포 환경이 일시적으로 산성화될 수 있습니다. 유해 활성산소 수치가 높아져 근육통이나 무기력증을 동반할 수 있습니다.',
+      advice:['즉각적인 수분 섭취와 함께 최소 7시간 이상의 깊은 수면을 취하세요','스트레스 호르몬(코르티솔) 감소를 위해 10분간의 가벼운 스트레칭과 심호흡을 권장합니다','비타민 C·E가 풍부한 과일·녹차를 섭취하고, 카페인과 가공식품을 멀리하세요']},
+    neutral:{urgent:false,
+      status:'정상 상태',
+      statusKey:'ok',
+      diagnosis:'패치 센서가 중성에 가까운 수치를 유지하고 있습니다. 신체의 항상성 메커니즘이 원활하게 작동하고 있으며, 대사 균형과 자율신경계가 안정 상태에 머물러 있습니다. 면역 기능이 정상적으로 활성화되어 있는 이상적인 컨디션입니다.',
+      advice:['현재의 생체 리듬을 유지하기 위해 규칙적인 식습관과 수면 패턴을 지속하세요','하루 1.5L 이상의 물을 주기적으로 섭취하여 노폐물 배출을 도우세요','가벼운 유산소 운동을 꾸준히 지속하면 세포의 활력이 더욱 오래 유지됩니다']},
+    alkaline:{urgent:false,
+      status:'안정 상태',
+      statusKey:'calm',
+      diagnosis:'pH 수치가 염기성 영역으로 경미하게 치우친 상태입니다. 질환이 없는 상태에서 일시적인 염기성 경향은 극심한 긴장·불안으로 인한 과호흡(알칼리증) 때문에 발생할 수 있습니다. 체내 이산화탄소가 과도하게 배출되어 세포 환경의 균형이 잠시 흐트러진 것으로 분석됩니다.',
+      advice:['천천히 들이마시고 길게 내쉬는 호흡법을 3분간 실시하여 체내 탄산 농도를 회복하세요','불안감을 유발하는 환경에서 잠시 벗어나 정서적 안정을 취하세요','이온 음료나 미네랄워터를 조금씩 나누어 마시며 전해질을 보충하세요']}
+  },
+  'diabetes':{
+    acidic:{urgent:true,
+      status:'고위험 — 케토산증 의심',
+      statusKey:'danger',
+      diagnosis:'당뇨 환자군에서 강한 산성 신호가 확인되었습니다. 인슐린 부족으로 세포가 당을 에너지로 쓰지 못하고 지방을 태우면서 케톤체가 과도하게 쌓였음을 강력히 시사합니다. 당뇨케토산증(DKA)으로 번질 수 있는 매우 위험한 상태입니다.',
+      advice:['처방받은 인슐린 투여를 즉시 점검하고 혈당·혈중 케톤 수치를 측정하세요','설탕 없는 물을 다량 섭취하여 소변으로 케톤을 배출시키세요','구토·복통·호흡 곤란이 동반된다면 즉시 응급실을 방문하세요']},
+    neutral:{urgent:false,
+      status:'안정 관리 중',
+      statusKey:'ok',
+      diagnosis:'당뇨병 기저질환이 있음에도 패치가 중성을 기록하여 대사 안정을 유지하고 있습니다. 인슐린 감수성이 양호하게 유지되고 있으며, 급격한 혈당 쇼크나 대사성 산증의 위험으로부터 안전한 상태입니다.',
+      advice:['공복·식후 혈당이 목표 범위 내에 있는지 주기적으로 모니터링하세요','매일 같은 시간에 정량의 식사를 하고 식후 30분 산책으로 혈당 피크를 억제하세요','섬유질이 풍부한 채소 중심의 식단을 고수하고 급격한 정신적 스트레스를 예방하세요']},
+    alkaline:{urgent:false,
+      status:'경계 관찰 필요',
+      statusKey:'warn',
+      diagnosis:'당뇨 환자의 신체 내부가 염기성으로 치우쳤습니다. 당뇨 합병증으로 신장의 산-염기 조절 기능이 약화되었거나, 복용 중인 당뇨약(이뇨제 포함)의 상호작용으로 체내 알칼리화가 진행 중일 가능성이 있습니다.',
+      advice:['복용 중인 당뇨 약물 종류와 용량을 기록하여 주치의와 상담하세요','칼륨이 높은 음식(토마토·바나나)을 일시적으로 제한하세요','신장에 부담을 주는 짠 음식을 극도로 멀리하세요']}
+  },
+  'hyperlipidemia':{
+    acidic:{urgent:false,
+      status:'혈관 산화 주의',
+      statusKey:'warn',
+      diagnosis:'고지혈증 환자군에서 강한 산성 신호가 감지되었습니다. 스트레스로 혈중 자유지방산이 급증하고 LDL 콜레스테롤이 산화되어 혈관에 기름 찌꺼기가 쌓이고 혈전이 생기기 쉬운 상태입니다.',
+      advice:['항산화 영양소(베리류·아몬드 등)를 섭취하세요','혈액 점도를 낮추기 위해 따뜻한 물을 틈틈이 마시며 혈액 순환을 촉진하세요','포화지방·트랜스지방 음식을 차단하고 가벼운 유산소 운동으로 혈관 건강을 관리하세요']},
+    neutral:{urgent:false,
+      status:'안정',
+      statusKey:'ok',
+      diagnosis:'고지혈증 체질군이지만 세포 간질액이 중성으로 매우 안전합니다. 혈중 지질이 과도하게 산화되지 않고 대사 순환이 원활하게 통제되고 있다는 신호입니다.',
+      advice:['불포화지방산이 풍부한 등푸른생선이나 오메가-3 영양제를 꾸준히 섭취하세요','수용성 식이섬유(오트밀·보리·해조류)를 식단에 반영하세요','주 3회 이상 30분 유산소 운동으로 혈관 탄성도를 유지하세요']},
+    alkaline:{urgent:false,
+      status:'약물 상호작용 주의',
+      statusKey:'warn',
+      diagnosis:'장기 복용 중인 지질 저하제(스타틴 계열)나 간 대사 과정에서 전해질 이동으로 인해 세포막 외액이 알칼리화되었을 가능성이 있습니다.',
+      advice:['약물을 임의로 중단하지 말고 다음 진단 시 패치 기록을 의료진에게 공유하세요','순수한 물 위주로 수분을 보충하고, 과도한 제산제·위장약 남용을 금하세요','마그네슘이 풍부한 녹색 잎채소·견과류를 적당량 섭취하세요']}
+  },
+  'migraine':{
+    acidic:{urgent:true,
+      status:'편두통 발작 고위험',
+      statusKey:'danger',
+      diagnosis:'편두통 환자군의 체내 산성도가 급감했습니다. 자율신경계가 극도로 자극받으면서 뇌혈관 주변에 염증성 대사 물질과 젖산이 급격히 축적된 상태입니다. 수시간 내 극심한 편두통 발작이 일어날 확률이 매우 높습니다.',
+      advice:['즉시 빛·소리가 차단된 어두운 방으로 이동해 눈을 감고 휴식을 취하세요','머리·목 뒤쪽에 차가운 아이스팩을 대어 확장된 뇌혈관을 수축시키세요','처방받은 급성기 치료제가 있다면 미리 복용하는 것을 고려하세요','편두통 유발 음식(치즈·초콜릿·가공육)을 절대 피하세요']},
+    neutral:{urgent:false,
+      status:'안정',
+      statusKey:'ok',
+      diagnosis:'편두통 유전적 요인이 있으나 현재 생체 환경은 중성을 유지하고 있습니다. 신경계의 과민 반응이 억제되어 있으며, 뇌혈관을 수축·확장시키는 인자들이 안정적으로 통제되고 있습니다.',
+      advice:['기상·취침 시간을 일정하게 유지하여 뇌가 스트레스를 받지 않게 하세요','카페인은 과다 섭취하거나 갑자기 끊을 때 모두 두통을 유발하므로 일정량을 유지하세요','마그네슘·비타민 B2를 꾸준히 섭취하세요']},
+    alkaline:{urgent:false,
+      status:'과호흡 주의',
+      statusKey:'warn',
+      diagnosis:'만성적인 스트레스로 인해 숨을 얕고 빠르게 쉬는 과호흡 상태일 때 자주 나타납니다. 혈액 내 이산화탄소 농도가 떨어지면 뇌혈관이 과도하게 수축하여 두통 전조증상이 올 수 있습니다.',
+      advice:['코로 4초간 깊게 들이마시고 6초간 천천히 내뱉는 호흡법을 5분간 반복하세요','목·어깨 근육의 긴장이 뇌 혈류를 방해하므로 가벼운 마사지와 찜질로 긴장을 풀어주세요','미지근한 물을 자주 마셔 신경계의 과흥분을 가라앉히세요']}
+  }
+};
+
+const STATUS_COLORS={
+  ok:'var(--accent3)',
+  warn:'var(--warn)',
+  danger:'var(--danger)',
+  calm:'var(--accent2)'
+};
+
+/* ── RENDER DIAGNOSIS ── */
+function renderDiagnosis(){
+  const ph  = parseFloat(document.getElementById('f-ph').value);
+  const lv  = phLevel(ph);
+  const selected = [...document.querySelectorAll('#condition-chips .chip.active')].map(c=>c.dataset.val).filter(v=>v!=='none');
+  const diagCard = document.getElementById('diag-card');
+
+  if(selected.length===0){
+    /* "없음" 선택 — 기본 진단 */
+    const d = DG['없음'][lv];
+    diagCard.classList.add('visible');
+    document.getElementById('diag-title').textContent='pH 기반 진단';
+    document.getElementById('diag-subtitle').textContent='기저질환 없음 · pH '+ph.toFixed(2);
+    document.getElementById('diag-urgent').style.display='none';
+    renderDiagBody([{label:null, d}]);
+    return;
+  }
+
+  diagCard.classList.add('visible');
+  const items = selected.map(val=>{
+    const nameMap={diabetes:'당뇨',hyperlipidemia:'고지혈증',migraine:'편두통'};
+    const d = DG[val] && DG[val][lv];
+    return d ? {label:nameMap[val]||val, d} : null;
+  }).filter(Boolean);
+
+  if(items.length===0) return;
+
+  /* title — 복수 선택 시 요약 */
+  const names = items.map(i=>i.label).join(' · ');
+  document.getElementById('diag-title').textContent='맞춤형 진단';
+  document.getElementById('diag-subtitle').textContent=names+' · pH '+ph.toFixed(2);
+
+  const anyUrgent = items.some(i=>i.d.urgent);
+  document.getElementById('diag-urgent').style.display = anyUrgent?'inline-block':'none';
+
+  renderDiagBody(items);
+}
+
+function renderDiagBody(items){
+  const body = document.getElementById('diag-body');
+
+  if(items.length===1 && !items[0].label){
+    /* 기저질환 없음 — 단순 렌더 */
+    const {d} = items[0];
+    const sc = STATUS_COLORS[d.statusKey]||'var(--accent3)';
+    body.innerHTML = `
+      <div class="diag-section">
+        <div class="diag-section-label">상태</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;color:${sc}">${d.status}</div>
+      </div>
+      <div class="diag-divider"></div>
+      <div class="diag-section">
+        <div class="diag-section-label">진단</div>
+        <div class="diag-section-text">${d.diagnosis}</div>
+      </div>
+      <div class="diag-divider"></div>
+      <div class="diag-section">
+        <div class="diag-section-label">권장 행동</div>
+        <div class="advice-list">${d.advice.map((a,i)=>`<div class="advice-row"><span class="advice-num">${i+1}</span><span class="advice-text">${a}</span></div>`).join('')}</div>
+      </div>
+      <div class="diag-note">이 정보는 교육 목적으로 제공됩니다. 의료적 판단이 필요한 경우 반드시 전문 의료진과 상담하세요.</div>
+    `;
+    return;
+  }
+
+  /* 기저질환 1개 이상 */
+  body.innerHTML = items.map((item,idx)=>{
+    const {label,d} = item;
+    const sc = STATUS_COLORS[d.statusKey]||'var(--accent3)';
+    const borderColor = d.statusKey==='danger'?'rgba(239,68,68,0.25)': d.statusKey==='warn'?'rgba(245,158,11,0.25)':'rgba(0,229,255,0.15)';
+    return `
+      <div style="background:var(--surface2);border:1px solid ${borderColor};border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;${idx>0?'margin-top:0':''}">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div>
+            <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:3px;text-transform:uppercase">${label}</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:${sc}">${d.status}</div>
+          </div>
+          ${d.urgent?'<span style="font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:1px;padding:3px 8px;border-radius:20px;background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.3);white-space:nowrap">즉각 조치</span>':''}
+        </div>
+        <div style="font-size:12px;color:#8fa3c8;line-height:1.65;">${d.diagnosis}</div>
+        <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:10px">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px;text-transform:uppercase">권장 행동</div>
+          ${d.advice.map((a,i)=>`<div class="advice-row" style="margin-bottom:5px"><span class="advice-num">${i+1}</span><span class="advice-text" style="font-size:12px">${a}</span></div>`).join('')}
+        </div>
+      </div>
+    `;
+  }).join('')+`<div class="diag-note">이 정보는 교육 목적으로 제공됩니다. 의료적 판단이 필요한 경우 반드시 전문 의료진과 상담하세요.</div>`;
+}
+
+/* ── CONDITION DATA (biomarker-correlated) ── */
+const CONDITION_DATA={
+  diabetes:{
+    icon:'💉',name:'당뇨',
+    comment(glu,ph){
       if(glu>125) return '혈당이 높습니다. 당뇨 환자의 경우 공복혈당 126 이상은 의료 상담이 필요합니다.';
       if(glu>100) return '혈당이 경계 범위입니다. 당뇨 관리 중이시라면 식이와 약물 복용을 재확인하세요.';
       return '현재 혈당은 정상 범위입니다. 당뇨 관리가 잘 이루어지고 있습니다.';
     }
   },
-  hyperlipidemia: {
-    icon:'🧬',
-    name:'고지혈증',
+  hyperlipidemia:{
+    icon:'🧬',name:'고지혈증',
     comment(glu,ph){
       if(glu>100) return '혈당 상승은 고지혈증과 복합적으로 심혈관 위험을 높일 수 있습니다. 운동과 식이 관리가 중요합니다.';
       return '혈당은 정상이나, 고지혈증 환자는 정기적인 지질 수치 모니터링을 병행하는 것이 좋습니다.';
     }
   },
-  anemia: {
-    icon:'🩺',
-    name:'빈혈',
+  migraine:{
+    icon:'🧠',name:'편두통',
     comment(glu,ph,lac){
-      if(lac>2.0) return '젖산이 높습니다. 빈혈로 인한 산소 공급 부족 시 혐기성 대사가 증가해 젖산이 축적됩니다.';
-      if(ph<7.35) return '산소 운반 감소로 인한 산성화가 감지됩니다. 철분·엽산 수치를 확인하세요.';
-      return '현재 수치는 안정적입니다. 철분 섭취와 정기적인 혈색소 검사를 유지하세요.';
+      if(ph<7.35) return '산성화 신호 감지. 편두통 환자의 경우 산화 스트레스가 두통 발작을 유발할 수 있습니다.';
+      if(lac>2.0) return '젖산이 높습니다. 과도한 신체·정신 피로는 편두통 역치를 낮출 수 있습니다.';
+      return '현재 수치는 안정적입니다. 규칙적인 수면과 수분 섭취로 두통 예방을 유지하세요.';
     }
   }
 };
@@ -697,19 +787,18 @@ function renderConditionComments(){
   const ph  = parseFloat(document.getElementById('f-ph').value);
   const glu = parseFloat(document.getElementById('f-glucose').value);
   const lac = parseFloat(document.getElementById('f-lactate').value);
-  const sod = parseFloat(document.getElementById('f-sodium').value);
-  const selected = [...document.querySelectorAll('#condition-chips .chip.active')].map(c=>c.dataset.val).filter(v=>v!=='none');
-  const box = document.getElementById('condition-comments');
+  const selected=[...document.querySelectorAll('#condition-chips .chip.active')].map(c=>c.dataset.val).filter(v=>v!=='none');
+  const box=document.getElementById('condition-comments');
   if(selected.length===0){
     box.innerHTML='<div class="no-condition">기저질환을 선택하면<br>맞춤 코멘트가 표시됩니다</div>';
     return;
   }
-  box.innerHTML = selected.map(val=>{
-    const d = CONDITION_DATA[val]; if(!d) return '';
-    const msg = d.comment(glu,ph,lac,sod);
-    const isWarn = msg.includes('높') || msg.includes('낮') || msg.includes('감지') || msg.includes('상담') || msg.includes('위험') || msg.includes('주의') || msg.includes('악화');
-    const borderCol = isWarn ? 'rgba(239,68,68,0.25)' : 'rgba(0,229,255,0.2)';
-    return `<div class="comment-condition has-comment" style="border-color:${borderCol}">
+  box.innerHTML=selected.map(val=>{
+    const d=CONDITION_DATA[val]; if(!d) return '';
+    const msg=d.comment(glu,ph,lac);
+    const isWarn=/(높|낮|감지|상담|위험|주의|악화|발작)/.test(msg);
+    const bc=isWarn?'rgba(239,68,68,0.25)':'rgba(0,229,255,0.2)';
+    return `<div class="comment-condition has-comment" style="border-color:${bc}">
       <div class="cond-icon">${d.icon}</div>
       <div class="cond-text">
         <div class="cond-name">${d.name}</div>
@@ -719,36 +808,69 @@ function renderConditionComments(){
   }).join('');
 }
 
+/* ── MAIN UPDATE ── */
+function onSlider(){
+  const ph  = parseFloat(document.getElementById('f-ph').value);
+  const glu = parseFloat(document.getElementById('f-glucose').value);
+  const lac = parseFloat(document.getElementById('f-lactate').value);
+  const sod = parseFloat(document.getElementById('f-sodium').value);
+
+  /* labels */
+  document.getElementById('ph-val-label').textContent=ph.toFixed(2);
+  document.getElementById('glucose-val-label').textContent=glu+' mg/dL';
+  document.getElementById('lactate-val-label').textContent=lac.toFixed(1)+' mmol/L';
+  document.getElementById('sodium-val-label').textContent=sod+' mEq/L';
+
+  /* slider tracks */
+  const pct=((ph-4.5)/(9.0-4.5)*100);
+  document.getElementById('f-ph').style.setProperty('--pct',pct.toFixed(1)+'%');
+  document.getElementById('ph-thumb').style.left=pct+'%';
+  document.getElementById('f-glucose').style.setProperty('--pct',((glu-50)/110*100).toFixed(1)+'%');
+  document.getElementById('f-lactate').style.setProperty('--pct',((lac-0.3)/5.2*100).toFixed(1)+'%');
+  document.getElementById('f-sodium').style.setProperty('--pct',((sod-120)/40*100).toFixed(1)+'%');
+
+  /* gauge */
+  document.getElementById('gauge-needle').setAttribute('transform','rotate('+(phToDeg(ph))+' 100 100)');
+  const pc=phColor(ph);
+  document.getElementById('ph-display').textContent=ph.toFixed(2);
+  document.getElementById('ph-display').style.color=pc;
+  document.getElementById('ph-category').textContent=phLabel(ph);
+  document.getElementById('ph-category').style.color=pc;
+
+  /* biomarkers */
+  const gc=bioColor('glucose',glu),lc=bioColor('lactate',lac),sc=bioColor('sodium',sod);
+  const pG=document.getElementById('panel-glucose'),pL=document.getElementById('panel-lactate'),pS=document.getElementById('panel-sodium');
+  pG.textContent=glu;pG.style.color=gc;
+  pL.textContent=lac.toFixed(1);pL.style.color=lc;
+  pS.textContent=sod;pS.style.color=sc;
+  document.getElementById('bar-glucose').style.cssText=`width:${bioBarPct('glucose',glu)}%;background:${gc}`;
+  document.getElementById('bar-lactate').style.cssText=`width:${bioBarPct('lactate',lac)}%;background:${lc}`;
+  document.getElementById('bar-sodium').style.cssText =`width:${bioBarPct('sodium',sod)}%;background:${sc}`;
+
+  /* overall */
+  const cols=[pc,gc,lc,sc];
+  const allOk=cols.every(c=>c==='var(--accent3)');
+  const anyBad=cols.some(c=>c==='var(--danger)');
+  const ov=allOk?'normal':anyBad?'danger':'warn';
+  const ovColors={normal:'var(--accent3)',warn:'var(--warn)',danger:'var(--danger)'};
+  const ovLabels={normal:'정상',warn:'경계',danger:'주의 필요'};
+  const ovIcons={normal:'✅',warn:'⚠️',danger:'🚨'};
+  const ovMsgs={normal:'모든 수치가 정상 범위 내에 있습니다. 현재 신체 상태는 양호합니다.',warn:'일부 수치가 경계 범위에 진입했습니다. 수분 섭취와 충분한 휴식을 권장합니다.',danger:'비정상 수치가 감지되었습니다. 의료 전문가 상담을 권장합니다.'};
+  document.getElementById('overall-val').textContent=ovLabels[ov];
+  document.getElementById('overall-val').style.color=ovColors[ov];
+  document.getElementById('overall-icon').textContent=ovIcons[ov];
+  document.getElementById('overall-detail').textContent=ovMsgs[ov];
+
+  /* 조건 코멘트 + 진단 재렌더 */
+  renderConditionComments();
+  renderDiagnosis();
+}
+
 /* ── INIT ── */
 onSlider();
-
-/* re-render comments when sliders move */
 ['f-ph','f-glucose','f-lactate','f-sodium'].forEach(id=>{
-  document.getElementById(id).addEventListener('input',renderConditionComments);
+  document.getElementById(id).addEventListener('input',()=>{ onSlider(); });
 });
-
-/* ── SUBMIT ── */
-function handleSubmit(){
-  const name  = document.getElementById('f-name').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-  const addr  = document.getElementById('f-addr1').value.trim();
-  if(!name||!email||!addr){
-    [['f-name',name],['f-email',email],['f-addr1',addr]].forEach(([id,v])=>{
-      if(!v){ const el=document.getElementById(id); el.style.borderColor='var(--danger)'; el.style.boxShadow='0 0 0 3px rgba(239,68,68,0.12)'; setTimeout(()=>{ el.style.borderColor=''; el.style.boxShadow=''; },2000); }
-    });
-    return;
-  }
-  const ph  = document.getElementById('f-ph').value;
-  const glu = document.getElementById('f-glucose').value;
-  const lac = document.getElementById('f-lactate').value;
-  const sod = document.getElementById('f-sodium').value;
-  const conds = [...document.querySelectorAll('#condition-chips .chip.active')].map(c=>c.textContent).join(', ')||'없음';
-  document.getElementById('successSummary').innerHTML =
-    `신청자: ${name} &nbsp;·&nbsp; ${email}<br>입력 수치: pH ${ph} · 혈당 ${glu} · 젖산 ${lac} · Na⁺ ${sod}<br>기저질환: ${conds}`;
-  document.getElementById('successOverlay').classList.add('show');
-}
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done: $(wc -l < /mnt/user-data/outputs/icantdie_experience.html) lines"
