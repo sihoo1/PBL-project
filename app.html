@@ -268,39 +268,7 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
     <!-- ── 왼쪽: 폼 ── -->
     <div class="form-section">
 
-      <!-- 01 기본 정보 -->
-      <div class="form-block reveal">
-        <div class="form-block-header">
-          <span class="form-block-num">01</span>
-          <span class="form-block-title">기본 정보</span>
-        </div>
-        <div class="form-block-body">
-          <div class="field-row">
-            <div class="field-group">
-              <label class="field-label">이름</label>
-              <input type="text" id="f-name" placeholder="홍길동">
-            </div>
-            <div class="field-group">
-              <label class="field-label">나이</label>
-              <input type="number" id="f-age" placeholder="28" min="15" max="90">
-            </div>
-          </div>
-          <div class="field-group">
-            <label class="field-label">이메일</label>
-            <input type="email" id="f-email" placeholder="hello@example.com">
-          </div>
-          <div class="field-group">
-            <label class="field-label">성별</label>
-            <div class="chip-group" id="gender-chips">
-              <div class="chip" data-val="male">남성</div>
-              <div class="chip" data-val="female">여성</div>
-              <div class="chip" data-val="other">기타</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 02 체내 수치 입력 -->
+      <!-- 01 체내 수치 입력 -->
       <div class="form-block reveal">
         <div class="form-block-header">
           <span class="form-block-num">02</span>
@@ -364,18 +332,8 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
           <div class="chip-group" id="condition-chips">
             <div class="chip" data-val="none">없음</div>
             <div class="chip" data-val="diabetes">당뇨</div>
-            <div class="chip" data-val="hypertension">고혈압</div>
             <div class="chip" data-val="hyperlipidemia">고지혈증</div>
-            <div class="chip" data-val="hypothyroid">갑상선 기능 저하</div>
-            <div class="chip" data-val="hyperthyroid">갑상선 기능 항진</div>
-            <div class="chip" data-val="kidney">만성 신장 질환</div>
-            <div class="chip" data-val="liver">간 질환</div>
-            <div class="chip" data-val="heart">심장 질환</div>
             <div class="chip" data-val="anemia">빈혈</div>
-            <div class="chip" data-val="gerd">위식도역류</div>
-            <div class="chip" data-val="ibs">과민성 대장</div>
-            <div class="chip" data-val="asthma">천식</div>
-            <div class="chip" data-val="arthritis">관절염</div>
           </div>
         </div>
       </div>
@@ -412,39 +370,6 @@ cat > /mnt/user-data/outputs/icantdie_experience.html << 'HTMLEOF'
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- 05 배송 -->
-      <div class="form-block reveal">
-        <div class="form-block-header">
-          <span class="form-block-num">05</span>
-          <span class="form-block-title">배송 정보</span>
-        </div>
-        <div class="form-block-body">
-          <div class="field-group">
-            <label class="field-label">주소</label>
-            <input type="text" id="f-addr1" placeholder="서울특별시 강남구 테헤란로 123">
-          </div>
-          <div class="field-row">
-            <div class="field-group">
-              <label class="field-label">상세 주소</label>
-              <input type="text" id="f-addr2" placeholder="101동 202호">
-            </div>
-            <div class="field-group">
-              <label class="field-label">우편번호</label>
-              <input type="text" id="f-zip" placeholder="06234">
-            </div>
-          </div>
-          <div class="field-group">
-            <label class="field-label">기대 메시지 (선택)</label>
-            <textarea id="f-message" placeholder="어떤 결과를 기대하시나요?"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <button class="btn-primary" onclick="handleSubmit()">체험 신청 완료하기</button>
-        <p class="submit-note">개인정보는 배송 목적으로만 사용되며 체험 종료 후 즉시 파기됩니다.<br>무료 체험은 선착순 200명, 1인 1회 한정입니다.</p>
       </div>
 
     </div>
@@ -749,68 +674,12 @@ const CONDITION_DATA = {
       return '현재 혈당은 정상 범위입니다. 당뇨 관리가 잘 이루어지고 있습니다.';
     }
   },
-  hypertension: {
-    icon:'❤️',
-    name:'고혈압',
-    comment(glu,ph,lac,sod){
-      if(sod>145) return '나트륨 수치가 높습니다. 고혈압 환자에게 나트륨 과잉은 혈압 상승 위험을 높입니다.';
-      if(sod>=136) return '나트륨 수치는 정상입니다. 저염식 유지와 규칙적인 측정을 권장합니다.';
-      return '나트륨 수치가 낮습니다. 이뇨제 복용 중이라면 의사와 상담하세요.';
-    }
-  },
   hyperlipidemia: {
     icon:'🧬',
     name:'고지혈증',
     comment(glu,ph){
       if(glu>100) return '혈당 상승은 고지혈증과 복합적으로 심혈관 위험을 높일 수 있습니다. 운동과 식이 관리가 중요합니다.';
       return '혈당은 정상이나, 고지혈증 환자는 정기적인 지질 수치 모니터링을 병행하는 것이 좋습니다.';
-    }
-  },
-  hypothyroid: {
-    icon:'🦋',
-    name:'갑상선 기능 저하',
-    comment(glu,ph,lac){
-      if(glu>100) return '갑상선 기능 저하 시 혈당 조절 능력이 떨어질 수 있습니다. 갑상선 호르몬 수치를 함께 확인하세요.';
-      if(lac>2.0) return '젖산 수치가 높습니다. 갑상선 기능 저하는 대사를 느리게 해 젖산 축적을 유발할 수 있습니다.';
-      return '현재 수치는 양호합니다. 갑상선 호르몬 보충제 복용 시간을 일정하게 유지하세요.';
-    }
-  },
-  hyperthyroid: {
-    icon:'⚡',
-    name:'갑상선 기능 항진',
-    comment(glu,ph,lac){
-      if(glu>100) return '갑상선 기능 항진은 혈당을 높일 수 있습니다. 현재 혈당이 경계 범위입니다.';
-      if(lac>2.0) return '빠른 대사로 인해 젖산이 빠르게 생성될 수 있습니다. 과도한 운동을 피하세요.';
-      return '수치는 양호합니다. 항갑상선 약물 복용을 규칙적으로 유지하세요.';
-    }
-  },
-  kidney: {
-    icon:'🫘',
-    name:'만성 신장 질환',
-    comment(glu,ph,lac,sod){
-      if(sod>145) return '나트륨 과잉은 만성 신장 질환을 악화시킬 수 있습니다. 수분 섭취와 식이 나트륨 제한이 필요합니다.';
-      if(ph<7.35) return '혈액이 산성화되고 있습니다. 신장 기능 저하 시 산-염기 불균형이 심해질 수 있습니다.';
-      return '현재 수치는 안정적입니다. 신장 질환 환자는 정기적인 creatinine·BUN 검사를 권장합니다.';
-    }
-  },
-  liver: {
-    icon:'🫀',
-    name:'간 질환',
-    comment(glu,ph,lac){
-      if(lac>2.0) return '젖산 수치가 높습니다. 간 기능 저하 시 젖산 대사가 느려져 젖산산증 위험이 있습니다.';
-      if(glu<70)  return '혈당이 낮습니다. 간은 포도당 생성에 중요한 역할을 하므로 간 질환 시 저혈당에 주의하세요.';
-      if(ph<7.35) return '혈액 산성화가 감지됩니다. 간 기능과 연관될 수 있으므로 전문의 상담을 권장합니다.';
-      return '현재 수치는 안정적입니다. 정기적인 간 기능 검사와 금주를 유지하세요.';
-    }
-  },
-  heart: {
-    icon:'💗',
-    name:'심장 질환',
-    comment(glu,ph,lac,sod){
-      if(sod>145) return '나트륨 과잉은 심장에 부담을 줄 수 있습니다. 저염식과 수분 균형 유지가 중요합니다.';
-      if(lac>2.0) return '젖산 수치가 높습니다. 심장 질환 시 운동 시 젖산 축적이 더 빠를 수 있습니다.';
-      if(ph<7.35) return '혈액 산성화는 심장 리듬에 영향을 줄 수 있습니다. 즉시 의료 상담을 권장합니다.';
-      return '현재 수치는 양호합니다. 처방된 약물 복용을 유지하고 규칙적인 경과 관찰을 받으세요.';
     }
   },
   anemia: {
@@ -820,39 +689,6 @@ const CONDITION_DATA = {
       if(lac>2.0) return '젖산이 높습니다. 빈혈로 인한 산소 공급 부족 시 혐기성 대사가 증가해 젖산이 축적됩니다.';
       if(ph<7.35) return '산소 운반 감소로 인한 산성화가 감지됩니다. 철분·엽산 수치를 확인하세요.';
       return '현재 수치는 안정적입니다. 철분 섭취와 정기적인 혈색소 검사를 유지하세요.';
-    }
-  },
-  gerd: {
-    icon:'🔥',
-    name:'위식도역류',
-    comment(glu,ph){
-      if(ph<7.0) return '전신 산성도가 낮습니다. 위산 역류와 복합적으로 신체 pH 균형에 영향을 줄 수 있습니다.';
-      return '혈액 pH는 정상입니다. 위식도역류는 식후 눕지 않기, 소량 자주 먹기로 관리하세요.';
-    }
-  },
-  ibs: {
-    icon:'🌀',
-    name:'과민성 대장',
-    comment(glu,ph){
-      return '장 상태와 혈액 수치는 직접 연관성이 낮으나, 스트레스와 식이는 IBS와 전반적 건강 모두에 영향을 줍니다. 식이 일지를 기록해보세요.';
-    }
-  },
-  asthma: {
-    icon:'💨',
-    name:'천식',
-    comment(glu,ph,lac){
-      if(ph<7.35) return '혈액 산성화가 감지됩니다. 천식 발작 시 이산화탄소 축적으로 호흡성 산증이 올 수 있습니다.';
-      if(lac>2.0) return '젖산 수치가 높습니다. 호흡 곤란 시 산소 공급 부족으로 젖산이 증가할 수 있습니다.';
-      return '현재 수치는 안정적입니다. 발작 예방을 위해 흡입기를 항상 지참하세요.';
-    }
-  },
-  arthritis: {
-    icon:'🦴',
-    name:'관절염',
-    comment(glu,ph,lac){
-      if(lac>2.0) return '관절 주변 젖산 축적은 염증을 악화시킬 수 있습니다. 적당한 강도의 유산소 운동을 권장합니다.';
-      if(ph<7.35) return '약한 산성화가 감지됩니다. 산성 환경은 관절 염증을 증가시킬 수 있습니다.';
-      return '현재 수치는 안정적입니다. 관절 부담을 줄이는 저충격 운동(수영, 자전거)을 권장합니다.';
     }
   }
 };
