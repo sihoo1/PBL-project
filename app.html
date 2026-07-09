@@ -686,7 +686,7 @@ function renderDiagnosis(){
 
   diagCard.classList.add('visible');
   const items = selected.map(val=>{
-    const nameMap={diabetes:'당뇨',hyperlipidemia:'고지혈증',migraine:'빈혈'};
+    const nameMap={diabetes:'당뇨',hyperlipidemia:'고지혈증',anemia:'빈혈'};
     const d = DG[val] && DG[val][lv];
     return d ? {label:nameMap[val]||val, d} : null;
   }).filter(Boolean);
@@ -772,7 +772,7 @@ const CONDITION_DATA={
       return '혈당은 정상이나, 고지혈증 환자는 정기적인 지질 수치 모니터링을 병행하는 것이 좋습니다.';
     }
   },
-  migraine:{
+  anemia:{
     icon:'🧠',name:'빈혈',
     comment(glu,ph,lac){
       if(ph<7.35) return '산성화 신호 감지. 빈혈 환자의 경우 산화 스트레스가 두통 발작을 유발할 수 있습니다.';
