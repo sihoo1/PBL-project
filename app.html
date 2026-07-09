@@ -890,5 +890,17 @@ onSlider();
   document.getElementById(id).addEventListener('input',()=>{ onSlider(); });
 });
 </script>
+  <section class="ph-full">
+  <div class="diag-card visible" id="diag-card">
+    <div class="diag-header">
+      <div>
+        <div class="diag-title" id="diag-title">pH 기반 진단</div>
+        <div class="diag-subtitle" id="diag-subtitle"></div>
+      </div>
+      <span class="urgent-pill" id="diag-urgent" style="display:none">즉각 조치 필요</span>
+    </div>
+    <div class="diag-body" id="diag-body"></div>
+  </div>
+</section>
 </body>
 </html>
